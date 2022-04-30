@@ -1,0 +1,3 @@
+com\db\store\service\TradeStoreServiceTests.class
+com\db\store\controller\TradeStoreControllerTests.class
+com\db\store\StoreApplicationTests.class

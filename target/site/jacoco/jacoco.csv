@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+store,com.db.store.entity,Trade,0,86,0,0,0,18,0,16,0,16
+store,com.db.store.controller,TradeStoreController,0,29,0,0,0,4,0,4,0,4
+store,com.db.store.utils,Validator,3,27,1,5,1,6,2,4,1,2
+store,com.db.store.utils,TradeDTO,3,82,0,0,1,17,1,15,1,15
+store,com.db.store.exception,TradeStoreException,0,4,0,0,0,2,0,1,0,1
+store,com.db.store.service,TradeStoreServiceImpl,0,132,0,8,0,21,0,11,0,7

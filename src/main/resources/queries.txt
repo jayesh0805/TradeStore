@@ -1,0 +1,15 @@
+create table trade(
+trade_id varchar(20) primary key,
+version number,
+counter_party_id varchar(20),
+book_id varchar(20),
+maturity_date Date,
+created_date Date,
+expired varchar(10)
+);
+
+
+
+insert into trade values('T1',1,'CP-1','B1',TO_DATE('20/05/2020', 'DD/MM/YYYY'),TO_DATE('30/04/2022', 'DD/MM/YYYY'),'N');
+
+insert into trade values('T2',2,'CP-2','B1',TO_DATE('20/05/2021', 'DD/MM/YYYY'),TO_DATE('30/04/2022', 'DD/MM/YYYY'),'N');

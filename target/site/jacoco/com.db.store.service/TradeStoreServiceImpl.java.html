@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TradeStoreServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">store</a> &gt; <a href="index.source.html" class="el_package">com.db.store.service</a> &gt; <span class="el_source">TradeStoreServiceImpl.java</span></div><h1>TradeStoreServiceImpl.java</h1><pre class="source lang-java linenums">package com.db.store.service;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import com.db.store.entity.Trade;
+import com.db.store.exception.TradeStoreException;
+import com.db.store.repo.TradeStoreRepository;
+import com.db.store.utils.TradeDTO;
+import com.db.store.utils.Validator;
+
+@Service
+<span class="fc" id="L19">public class TradeStoreServiceImpl implements TradeStoreService {</span>
+
+	@Autowired
+	TradeStoreRepository repo;
+
+	@Override
+	public String storeTrade(TradeDTO trade) throws TradeStoreException {
+		// method call to validate the maturity date
+<span class="fc" id="L27">		Validator.validateMaturityDate(trade.getMaturityDate());</span>
+<span class="fc" id="L28">		Optional&lt;Trade&gt; tradeEntity = repo.findById(trade.getTradeId());</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">		if (tradeEntity.isPresent()) {</span>
+			// method call to validate version
+<span class="fc" id="L31">			Validator.validateVersion(trade.getVersion(), tradeEntity.get().getVersion());</span>
+			// persisting the updates in to the store
+<span class="fc" id="L33">			repo.saveAndFlush(TradeDTO.convertToTrade(trade));</span>
+<span class="fc" id="L34">			return &quot;Trade with Id: &quot; + trade.getTradeId() + &quot; has been updated&quot;;</span>
+		} else {
+			// persisting the new trade details into the store
+<span class="fc" id="L37">			repo.saveAndFlush(TradeDTO.convertToTrade(trade));</span>
+<span class="fc" id="L38">			return &quot;Trade with Id: &quot; + trade.getTradeId() + &quot; has been added to the store&quot;;</span>
+		}
+
+	}
+
+	@Override
+	public TradeDTO getTradeById(String tradeId) throws TradeStoreException {
+<span class="fc bfc" id="L45" title="All 2 branches covered.">		if (repo.findById(tradeId).isPresent())</span>
+<span class="fc" id="L46">			return Trade.convertToTradeDTO(repo.findById(tradeId).get());</span>
+		else
+<span class="fc" id="L48">			throw new TradeStoreException(&quot;Trade with Id: &quot; + tradeId + &quot; not found !&quot;);</span>
+	}
+
+	@Override
+	public List&lt;TradeDTO&gt; getTrades() {
+<span class="fc" id="L53">		List&lt;TradeDTO&gt; tradeList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L54">		repo.findAll().forEach(trade -&gt; tradeList.add(Trade.convertToTradeDTO(trade)));</span>
+<span class="fc" id="L55">		return tradeList;</span>
+	}
+
+	/*
+	 * scheduling the method to check the maturity date of all trades if a trade has
+	 * a maturity date before present date the expiration status will be changes to
+	 * 'N'
+	 */
+
+	// Scheduled the method call to every 10 mins
+
+	@Scheduled(initialDelay = 1000, fixedRate = 600000)
+	public void updateExpiry() {
+<span class="fc" id="L68">		repo.findAll().forEach(trade -&gt; {</span>
+<span class="fc bfc" id="L69" title="All 4 branches covered.">			if (trade.getMaturityDate().isBefore(LocalDate.now()) &amp;&amp; trade.getExpired().equalsIgnoreCase(&quot;N&quot;)) {</span>
+<span class="fc" id="L70">				trade.setExpired(&quot;Y&quot;);</span>
+<span class="fc" id="L71">				repo.saveAndFlush(trade);</span>
+			}
+<span class="fc" id="L73">		});</span>
+<span class="fc" id="L74">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
