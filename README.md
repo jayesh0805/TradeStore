@@ -20,7 +20,7 @@ There are couples of validation, we need to provide in the above assignment
 
 **Queries-File-Path**: src/main/resources/queries.txt (create table queries and 2 input queries)
 
-**Coverage-Report-Path (using Jacoco)**: target/site/jacoco/index.html**
+**Coverage-Report-Path (using Jacoco)**: target/site/jacoco/index.html
 
 **Paths**:
 
