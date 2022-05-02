@@ -24,7 +24,6 @@ public class TradeDTO {
 	@NotNull
 	private LocalDate maturityDate;
 	private LocalDate createdDate;
-	@NotNull
 	private String Expired;
 
 	public static Trade convertToTrade(TradeDTO tradeDTO) {
