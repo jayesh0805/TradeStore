@@ -2,9 +2,12 @@ package com.db.store.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,7 @@ import com.db.store.service.TradeStoreService;
 import com.db.store.utils.TradeDTO;
 
 @RestController
+@Validated
 public class TradeStoreController {
 
 	@Autowired
@@ -23,7 +27,7 @@ public class TradeStoreController {
 
 	// post method to validate and store trade or update existing trade
 	@PostMapping("/trade")
-	public ResponseEntity<String> storeTrade(@RequestBody TradeDTO trade) throws TradeStoreException {
+	public ResponseEntity<String> storeTrade(@RequestBody @Valid TradeDTO trade) throws TradeStoreException {
 		return new ResponseEntity<String>(service.storeTrade(trade), HttpStatus.OK);
 	}
 
